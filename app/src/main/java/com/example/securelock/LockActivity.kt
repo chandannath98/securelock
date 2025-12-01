@@ -41,8 +41,12 @@ class LockActivity : FragmentActivity() {
             finish()
         }
 
-        // Trigger Biometric
-        if (BiometricHelper.isBiometricAvailable(this)) {
+        // Check Preference for Biometric
+        val prefs = getSharedPreferences("SecureLockPrefs", Context.MODE_PRIVATE)
+        val isBiometricEnabled = prefs.getBoolean("BIOMETRIC_ENABLED", true)
+
+        // Trigger Biometric only if enabled
+        if (isBiometricEnabled && BiometricHelper.isBiometricAvailable(this)) {
             BiometricHelper.showBiometricPrompt(
                 activity = this,
                 onSuccess = { performUnlock() },
